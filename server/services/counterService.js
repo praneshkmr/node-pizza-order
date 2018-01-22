@@ -7,3 +7,11 @@ export function getNextCustomerId() {
 export function getNextPizzaId() {
     return incrementCounter({ "entity": "pizza" });
 }
+
+export function getNextOrderId() {
+    return incrementCounter({ "entity": "order" });
+}
+
+export function getNextOrderItemId() {
+    return incrementCounter({ "entity": "orderItem" });
+}

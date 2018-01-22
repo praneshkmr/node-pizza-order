@@ -50,6 +50,7 @@ app.listen(3000, function () {
 import Mongoose from 'mongoose';
 import customerModel from './models/customer';
 import pizzaModel from './models/pizza';
+import orderModel from './models/order';
 
 Mongoose.connect('mongodb://localhost/node-pizza-order', function(err){
     if(err){
