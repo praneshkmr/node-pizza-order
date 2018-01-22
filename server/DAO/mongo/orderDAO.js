@@ -17,3 +17,7 @@ export function fetchOrderItemById(orderId, itemId) {
             return(order.items[0]);
         });
 }
+
+export function updateOrderById(id, data) {
+    return Order.findOneAndUpdate({ "id": id }, data, { "new": true });
+}

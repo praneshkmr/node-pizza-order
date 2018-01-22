@@ -1,6 +1,7 @@
-import { saveOrder, fetchOrderItemById, fetchOrderById } from "./../DAO/mongo/orderDAO";
+import { saveOrder, fetchOrderItemById, fetchOrderById, updateOrderById } from "./../DAO/mongo/orderDAO";
 import { getNextOrderId, getNextOrderItemId } from "./counterService";
 import { getPizzaById } from "./pizzaService";
+import { preparePizzaDough, ovenBakePizza, topArtOnPizza, makeReadyPizza } from "./pizzaMakerService";
 import { Promise } from "mongoose";
 
 export function createOrder(data) {
@@ -29,10 +30,16 @@ export function createOrder(data) {
         .then(function () {
             data.status = 'placed';
             data.totalPrice = totalPrice;
-            console.log(data);
             return data;
         })
-        .then(saveOrder);
+        .then(saveOrder)
+        .then(function(order){
+            preparePizzaDough(order)
+                .then(ovenBakePizza)
+                .then(topArtOnPizza)
+                .then(makeReadyPizza);
+            return order;
+        });
 }
 
 export function getOrderbyId(orderId) {
@@ -41,4 +48,8 @@ export function getOrderbyId(orderId) {
 
 export function getOrderItemById(orderId, itemId) {
     return fetchOrderItemById(orderId, itemId);
+}
+
+export function updateOrderStatus(order) {
+    return updateOrderById(order.id, order);
 }
