@@ -1,4 +1,4 @@
-import { saveCustomer } from "./../DAO/mongo/customerDAO";
+import { saveCustomer, fetchCustomerById } from "./../DAO/mongo/customerDAO";
 import { getNextCustomerId } from "./counterService";
 
 export function createCustomer(data){
@@ -9,4 +9,8 @@ export function createCustomer(data){
             return data;
         })
         .then(saveCustomer);
+}
+
+export function getCustomerById(id) {
+    return fetchCustomerById(id);
 }

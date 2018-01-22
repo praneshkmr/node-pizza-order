@@ -2,6 +2,8 @@ import { saveOrder, fetchOrderItemById, fetchOrderById, updateOrderById } from "
 import { getNextOrderId, getNextOrderItemId } from "./counterService";
 import { getPizzaById } from "./pizzaService";
 import { preparePizzaDough, ovenBakePizza, topArtOnPizza, makeReadyPizza } from "./pizzaMakerService";
+import { notifyBySMS, notifyByEmail } from "./notificationService";
+import { getCustomerById } from "./customerService";
 import { Promise } from "mongoose";
 
 export function createOrder(data) {
@@ -33,11 +35,22 @@ export function createOrder(data) {
             return data;
         })
         .then(saveOrder)
-        .then(function(order){
+        .then(function (order) {
+            let customerObj = null;
+            getCustomerById(order.customer).then(function (customer) {
+                customerObj = customer;
+            })
             preparePizzaDough(order)
                 .then(ovenBakePizza)
                 .then(topArtOnPizza)
-                .then(makeReadyPizza);
+                .then(makeReadyPizza)
+                .then(function (order) {
+                    let message = "Your Order is Ready";
+                    return notifyBySMS(customerObj.mobile, message)
+                        .then(function () {
+                            return notifyByEmail(customerObj.email, message);
+                        })
+                })
             return order;
         });
 }
