@@ -1,10 +1,17 @@
 import { Router } from 'express';
-import { makePizza } from './../services/pizzaService';
+import { createPizza } from './../services/pizzaService';
 let router  = Router();
 
-router.get('/', function(req, res, next){
-    res.send("Blah")
-    makePizza({});
+router.post('/', function(req, res, next){
+    let data = req.body;
+    createPizza(data)
+        .then(function(pizza){
+            res.send(pizza)
+        })
+        .catch(function(err){
+            console.log(err)
+            res.send(err)
+        });
 });
 
 export default router;
