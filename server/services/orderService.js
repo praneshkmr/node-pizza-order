@@ -1,4 +1,4 @@
-import { saveOrder } from "./../DAO/mongo/orderDAO";
+import { saveOrder, fetchOrderItemById, fetchOrderById } from "./../DAO/mongo/orderDAO";
 import { getNextOrderId, getNextOrderItemId } from "./counterService";
 import { getPizzaById } from "./pizzaService";
 import { Promise } from "mongoose";
@@ -33,4 +33,12 @@ export function createOrder(data) {
             return data;
         })
         .then(saveOrder);
+}
+
+export function getOrderbyId(orderId) {
+    return fetchOrderById(orderId);
+}
+
+export function getOrderItemById(orderId, itemId) {
+    return fetchOrderItemById(orderId, itemId);
 }
